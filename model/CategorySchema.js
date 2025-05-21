@@ -1,0 +1,24 @@
+const mongoose = require('mongoose');
+const CategorySchema = new mongoose.Schema({
+
+    categoryNmae: {
+        type: String,
+        required: true,
+
+    },
+    icon: {
+        type: Object,
+        
+
+    },
+    availableCountries: {
+        type: Array,
+       
+
+    }
+    
+
+
+});
+
+module.exports = mongoose.model('Category', CategorySchema);
