@@ -1,12 +1,12 @@
-const CategorySchema = require('../model/CategorySchema');
+const CountrySchema = require('../model/CountrySchema');
 
-const createCategory = async (request, response) => { 
+const createCountry = async (request, response) => { 
 
 
 try{   
-    const {categoryName, file, countryId } = request.body;
+    const {countryName, file, countryCode } = request.body;
 
-    if (!categoryName || !file || !countryId) {
+    if (!countryName || !file || !countryCode) {
         return response.status(400).json({code:400, message:'Some filelds are missing ....', data:null});
     }
     const country = new CountrySchema({
@@ -17,83 +17,74 @@ try{
         // the client send the ids of all the available countries, and the system must find all the countries for the request
 
         countryName: countryName,
-        icon:{
+        flag:{
             hash:'Temp Hash' ,
             resourceUrl:'https://www.google.com/url?sa=i&url=https%3A%2F%2Fdogtime.com%2Fdog-breeds%2Fsiberian-husky&psig=AOvVaw3N8nxuyrS11BtBi2pY6n_W&ust=1747811271806000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPiVysO-sY0DFQAAAAAdAAAAABAL' ,
             filename:'Temp File Name',
             directroy:'Temp Directory'
         },  //asskume that you have send the image to the S3   
-            availableCountries:[    
-            {
-                countryId:'Temp-Id-1',
-                countryName:'Sri Lanka',
-             },
-            {
-                countryId:'Temp-Id-2',
-                countryName:'USA',
-            }
-        ],
+            countryCode: countryCode
     });
 
-        const saveData = await category.save();
-        return response.status(201).json({code:201, message:'Category has been saved ....', data:saveData});
+        const saveData = await country.save();
+        return response.status(201).json({code:201, message:'Countrye has been saved ....', data:saveData});
 
     }catch (e) {
         response.status(500).json({code:500, message:'Something went wrong ....', error:e });
     }
         
 }
-const updateCategory = async (requst, response) => { 
+const updateCountry= async (requst, response) => { 
     
 try{   
-    const {categoryName} = requst.body;
 
-    if (!categoryName ) {
+    if (!countryName || !countryCode) {
         return response.status(400).json({code:400, message:'Some filelds are missing ....', data:null});
     }
-    const updateData = await CategorySchema.findOneAndUpdate({'_id':requst.params.id },{
+    const updateData = await CountrySchema.findOneAndUpdate({'_id':requst.params.id },{
         $set: {
-            categoryName : categoryName
+            countryName : countryName,
+            countryCode : countryCode
         }
     }, {new:true});
-    return response.status(200).json({code:200, message:'Category has been updated ....', data:updateData});
+    return response.status(200).json({code:200, message:'Country has been updated ....', data:updateData});
 
     }catch (e) {
         response.status(500).json({code:500, message:'Something went wrong ....', error:e });
     }
 }
-const deleteCategory =  async (requst, response) => { 
+const deleteCountry =  async (requst, response) => { 
     try{   
     
     if (!requst.params.id ) {
         return response.status(400).json({code:400, message:'Some filelds are missing ....', data:null});
     }
-    const deletedData = await CategorySchema.findOneAndDelete({'_id':requst.params.id });
+    const deletedData = await CountrySchema.findOneAndDelete({'_id':requst.params.id });
 
-    return response.status(204).json({code:204, message:'Category has been deleted ....', data:deletedData});
+    return response.status(204).json({code:204, message:'Country has been deleted ....', data:deletedData});
 
     }catch (e) {
         response.status(500).json({code:500, message:'Something went wrong ....', error:e });
     }
 }
-const findCategoryById = async(requst, response) => { 
+const findCountryById = async(requst, response) => { 
     try{   
     
         if (!requst.params.id ) {
             return response.status(400).json({code:400, message:'Some filelds are missing ....', data:null});
         }
-        const categoryData = await CategorySchema.findById({'_id':requst.params.id });
+        const countryData = await CountrySchema.findById({'_id':requst.params.id });
 
-        if (categoryData) {
-        return response.status(200).json({code:200, message:'Category data ....', data:categoryData });
+        if (countryData) {
+        return response.status(200).json({code:200, message:'Country data ....', data:categoryData });
         }
-        return response.status(404).json({code:404, message:'Category data not Found ....', data:null });
+        return response.status(404).json({code:404, message:'Country data not Found ....', data:null });
 
     }catch (e) {
         response.status(500).json({code:500, message:'Something went wrong ....', error:e });
     }
 }
-const findAllCategories = async (requst, response) => { 
+const findAllCountries = async (requst, response) => { 
     try{
         const {searchText, page=1, size=10}= requst.query;
         const pageIndex = parseInt(page);
@@ -104,11 +95,11 @@ const findAllCategories = async (requst, response) => {
             query.$text = { $search: searchText };
         }
         const skip = (pageIndex -1 )* pageSize ;
-        const categoryList =await CategorySchema.find(query)
+        const countryList =await CategorySchema.find(query)
             .limit(pageSize)
             .skip(skip)
-        const categoryListCount =await CategorySchema.countDocuments(query)
-        return response.status(200).json({code:200, message:'Category data  ....', data:{List: categoryList, dataCount:categoryListCount} });
+        const countryListCount =await CategorySchema.countDocuments(query)
+        return response.status(200).json({code:200, message:'Country data  ....', data:{List: countryList, dataCount:countryListCount} });
     }catch (e) {
         console.log(e);
         response.status(500).json({code:500, message:'Something went wrong ....', error:e });
@@ -118,5 +109,5 @@ const findAllCategories = async (requst, response) => {
 }
 
 module.exports = {
-    createCategory, updateCategory, deleteCategory, findCategoryById, findAllCategories
+    createCountry, updateCountry, deleteCountry, findCountryById, findAllCountries
 }
