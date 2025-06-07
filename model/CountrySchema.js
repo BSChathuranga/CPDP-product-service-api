@@ -1,22 +1,15 @@
 const mongoose = require('mongoose');
-const CountrySchema = new mongoose.Schema({
-
-    countryName: {
-        type: String,
-        required: true,
-
+const CountrySchema
+    = new mongoose.Schema({
+    countryName:{
+        type:String,
+        required:true
     },
-    countryCode: {
-        type: Object,
-        
-
+    countryCode:{
+        type:String
     },
-    flag: {
-        type: object,
-       
+    flag:{
+        type:Object
     }
-    
-
 });
-
-module.exports = mongoose.model('Countries', CountrySchema);
+module.exports = mongoose.model('countries',CountrySchema);

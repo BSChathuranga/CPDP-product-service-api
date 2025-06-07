@@ -1,28 +1,21 @@
 const mongoose = require('mongoose');
-const DiscountSchema = new mongoose.Schema({
-
-    discountName: {
-        type: String,
-        required: true,
-
+const DiscountSchema
+    = new mongoose.Schema({
+    discountName:{
+        type:String,
+        required:true
     },
-    percentsge: {
-        type: Number,
-        
-        
+    percentage:{
+        type:Number
     },
-    startDate: {
-        type: Date,
-       
+    startDate:{
+        type:Date
     },
-    
-    endDate : {
-        type: Date,
+    EndDate:{
+        type:Date
     },
-    lastUpdate: {
-        type: Date,
+    lastUpdate:{
+        type:Date
     }
-        
 });
-
-module.exports = mongoose.model('Discount', DiscountSchema);
+module.exports = mongoose.model('discounts',DiscountSchema);

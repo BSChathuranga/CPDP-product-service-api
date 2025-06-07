@@ -1,101 +1,98 @@
-const BookmarkSchemaSchema = require('../model/BookmarkSchema');
-
-const createBookmark = async (request, response) => { 
-
-
-try{   
-    const {userId, productId, createdDate } = request.body;
-
-    if (!userId || !productId|| !createdDate) {
-        return response.status(400).json({code:400, message:'Some filelds are missing ....', data:null});
-    }
-    const bookmark = new BookmarkSchema({
-        userId: userId,
-        productId: productId,
-        createdDate: createdDate
-    });
-
-        const saveData = await category.save();
-        return response.status(201).json({code:201, message:'Bookmark record has been saved ....', data:saveData});
-
-    }catch (e) {
-        response.status(500).json({code:500, message:'Something went wrong ....', error:e });
-    }
-        
-}
-const updateBookmark = async (requst, response) => { 
-    
-try{   
-    const {userId, productId, createdDate } = requst.body;
-
-    if (!userId || !productId|| !createdDate) {
-        return response.status(400).json({code:400, message:'Some filelds are missing ....', data:null});
-    }
-    const updateData = await CategorySchema.findOneAndUpdate({'_id':requst.params.id },{
-        $set: {
-             userId: userId,
-             productId: productId,
-             createdDate: createdDate
+const BookmarkSchema = require('../model/BookmarkSchema');
+// save (POST)
+const createBookmark = async (request, response) => {
+    try {
+        const {userId, productId, createdDate} = request.body;
+        if (!userId || !productId || !createdDate) {
+            return response.status(400).json({code: 400, message: 'some fields are missing!..', data: null});
         }
+        const bookmark = new BookmarkSchema({
+            userId: userId,
+            productId: productId,
+            createdDate: createdDate
+        });
 
-    }, {new:true});
-    return response.status(200).json({code:200, message:'Bookmark record has been updated ....', data:updateData});
-
-    }catch (e) {
-        response.status(500).json({code:500, message:'Something went wrong ....', error:e });
+        const saveData = await bookmark.save();
+        return response.status(201).json({code: 201, message: 'bookmark record has been saved...', data: saveData});
+    } catch (e) {
+        response.status(500).json({code: 500, message: 'something went wrong...', error: e});
     }
 }
-const deleteBookmark  =  async (requst, response) => { 
-    try{   
-    
-        if (!requst.params.id ) {
-            return response.status(400).json({code:400, message:'Some filelds are missing ....', data:null});
+// update (PUT)
+const updateBookmark = async (request, response) => {
+    try {
+        const {userId, productId, createdDate} = request.body;
+        if (!userId || !productId || !createdDate) {
+            return response.status(400).json({code: 400, message: 'some fields are missing!..', data: null});
         }
-        const deletedData = await BookmarkSchema.findOneAndDelete({'_id':requst.params.id });
-
-        return response.status(204).json({code:204, message:'Bookmark record has been deleted ....', data:deletedData});
-
-        }catch (e) {
-            response.status(500).json({code:500, message:'Something went wrong ....', error:e });
-        }
+        const updateData = await BookmarkSchema.findOneAndUpdate({'_id': request.params.id}, {
+            $set: {
+                userId: userId,
+                productId: productId,
+                createdDate: createdDate
+            }
+        }, {new: true});
+        return response.status(200).json({code: 200, message: 'bookmark record has been updated...', data: updateData});
+    } catch (e) {
+        response.status(500).json({code: 500, message: 'something went wrong...', error: e});
+    }
 }
-const findBookmarkById = async(requst, response) => { 
-    try{   
-    
-        if (!requst.params.id ) {
-            return response.status(400).json({code:400, message:'Some filelds are missing ....', data:null});
+// delete (DELETE)
+const deleteBookmark = async (request, response) => {
+    try {
+        if (!request.params.id) {
+            return response.status(400).json({code: 400, message: 'some fields are missing!..', data: null});
         }
-        const bookmarkData = await CategorySchema.findById({'_id':requst.params.id });
-
+        const deletedData =
+            await BookmarkSchema.findOneAndDelete({'_id': request.params.id});
+        return response.status(204).json({
+            code: 204,
+            message: 'bookmark record has been deleted...',
+            data: deletedData
+        });
+    } catch (e) {
+        response.status(500).json({code: 500, message: 'something went wrong...', error: e});
+    }
+}
+// find by id (GET)
+const findBookmarkById = async (request, response) => {
+    try {
+        if (!request.params.id) {
+            return response.status(400).json({code: 400, message: 'some fields are missing!..', data: null});
+        }
+        const bookmarkData =
+            await BookmarkSchema.findById({'_id': request.params.id});
         if (bookmarkData) {
-        return response.status(200).json({code:200, message:'Bookmark data ....', data:bookmarkData });
+            return response.status(200).json({code: 200, message: 'bookmark data...', data: bookmarkData});
         }
-        return response.status(404).json({code:404, message:'Bookmark data not Found ....', data:null });
-
-    }catch (e) {
-        response.status(500).json({code:500, message:'Something went wrong ....', error:e });
+        return response.status(404).json({code: 404, message: 'bookmark data data not found...', data: null});
+    } catch (e) {
+        response.status(500).json({code: 500, message: 'something went wrong...', error: e});
     }
 }
-const findAllBookmarks = async (requst, response) => { 
-    try{
-        const {page=1, size=10}= requst.query;
+// find all (GET)
+const findAllBookmarkRecords = async (request, response) => {
+    try {
+        const {page = 1, size = 10} = request.query;
         const pageIndex = parseInt(page);
         const pageSize = parseInt(size);
-             
-        const skip = (pageIndex -1 )* pageSize ;
-        const bookmarkList =await BookmarkSchema.find(query)
+
+        const skip = (pageIndex - 1) * pageSize;
+        const bookmarkDataList = await BookmarkSchema.find()
             .limit(pageSize)
-            .skip(skip)
-        const bookmarkListCount =await BookmarkSchemaSchema.countDocuments(query)
-        return response.status(200).json({code:200, message:'Bookmark data  ....', data:{List: bookmarkList, dataCount:bookmarkListCount} });
-    }catch (e) {
-        console.log(e);
-        response.status(500).json({code:500, message:'Something went wrong ....', error:e });
+            .skip(skip);
+        const bookmarkDataListCount = await BookmarkSchema.countDocuments();
+        return response.status(200).json({
+            code: 200,
+            message: 'category data data...',
+            data: {list: bookmarkDataList, dataCount: bookmarkDataListCount}
+        });
+    } catch (e) {
+        response.status(500).json({code: 500, message: 'something went wrong...', error: e});
     }
 
 
 }
-
 module.exports = {
-    createBookmark, updateBookmark, deleteBookmark, findBookmarkById, findAllBookmarks
+    createBookmark, updateBookmark, deleteBookmark, findBookmarkById, findAllBookmarkRecords
 }

@@ -1,41 +1,26 @@
 const mongoose = require('mongoose');
-const ReviewSchema = new mongoose.Schema({
-
-    orderID: {
-        type: String,
-       
+const ReviewSchema
+    = new mongoose.Schema({
+    orderId:{
+        type:Object
     },
-    message: {
-        type: String,
-        
+    message:{
+        type:String
     },
-    createDate: {
-        type: Date,
-        
+    createdDate:{
+        type:Date
     },
-    
-    userId: {
-        type: Number,
-
+    userId:{
+        type:Object
     },
-    
-    displayName: {
-        type: String,
-
+    displayName:{
+        type:String
     },
-    
-    productId: {
-        type: Object,
+    productId:{
+        type:Object
     },
-    
-    ratings: {
-        type: String,
+    ratings:{
+        type:Number
     }
-    
-    
-    
-
-
 });
-
-module.exports = mongoose.model('Category', ReSchema);
+module.exports = mongoose.model('review',ReviewSchema);

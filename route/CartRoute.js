@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.post('/create-cart', CartController.createCartRecord);
 router.put('/update-cart/:id', CartController.updateCartRecord);
-router.delete('/delete-cart/:id', CartController.createCartRecord);
-router.get('/find-cart-by-id/:id', CartController.findAllCartRecords);
-router.get('/find-all-cart', CartController.findAllCartRecords);
+router.delete('/delete-cart/:id', CartController.deleteCartRecord);
+router.get('/find-cart-by-id/:id', CartController.findCartRecordById);
+router.get('/find-all-carts', CartController.findAllCartRecords);
 
 module.exports = router;
